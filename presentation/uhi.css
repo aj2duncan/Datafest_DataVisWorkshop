@@ -1,0 +1,28 @@
+.inverse {
+  background-color: #572163;
+  color: #ffffff;
+  text-shadow: 0 0 20px #333;
+}
+
+.inverse h1, .inverse h2, .inverse h3 {
+  color: #ffffff;
+  line-height: 1.0em;
+}
+
+h1, h2, h3 {
+  color: #572163;
+  line-height: 1.0em;
+}
+
+p, ul, li {
+  color: #572163;
+}
+
+.remark-code-line-highlighted { 
+  background-color: #cf95dc; 
+}
+
+
+.left-column h2:last-of-type, .left-column h3:last-child {
+  color: #572163;
+}

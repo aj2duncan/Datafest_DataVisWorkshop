@@ -1,0 +1,22 @@
+---
+title: "Introduction to Interactive Visualisation"
+subtitle: "R and Shiny"
+author: ""
+date: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: ["default", "default-fonts", "uhi.css"]
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, warning = FALSE,
+                      message = FALSE, comment = NA)
+library(tidyverse)
+theme_set(theme_gray(base_size = 18))
+```
+
