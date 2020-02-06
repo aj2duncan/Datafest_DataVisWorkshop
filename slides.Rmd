@@ -1,0 +1,158 @@
+---
+title: "Introduction to Interactive Visualisation"
+subtitle: ""
+author: ""
+date: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: ["default", "default-fonts", "css/uhi.css"]
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, warning = FALSE,
+                      message = FALSE, comment = NA)
+library(tidyverse)
+theme_set(theme_gray(base_size = 18))
+```
+
+
+# Welcome
+
+- Housekeeping
+
+- Laptops
+
+- Experience? (R/Shiny/...)
+
+---
+# Plan for the afternoon
+
+```{r, out.width = "50%", echo = FALSE, fig.align = 'center'}
+knitr::include_graphics("https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/shiny.png")
+```
+
+Image Source: https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/shiny.png
+---
+# R
+
+- Open source statistical software
+
+- [RStudio](https://rstudio.com/) is an IDE that helps make `R` easier to use
+
+- **Shiny** is an add on package turns `R` code into web applications.
+
+--
+
+-  My experience with Shiny:
+
+    - Built shiny apps for both internal and external use
+    
+    - External: Online calculators/Teaching tools
+    
+    - Internal: Automated Reporting 
+
+---
+# Today
+
+- Interactive plots using [plotly](https://plot.ly/r/) package.
+
+- Controlling User input.
+
+- Reactivity
+
+--
+
+- Lots of example apps to work with
+
+- A larger app for you to build
+
+---
+# A Shiny App
+
+Single `app.R` file
+
+```{r, eval = FALSE}
+# load packages
+library(shiny)
+
+# Define what the user sees
+ui <- fluidPage(
+  # what the user sees
+)
+
+# Define server logic required to sort data and draw plot
+server <- function(input, output) {
+  # what actually does the work behind the scenes
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+```
+
+---
+# A Shiny App
+
+```{r, eval = FALSE}
+# load packages
+library(shiny)
+
+# Define what the user sees
+ui <- fluidPage(
+  # Sidebar with input for user to control 
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput(label = "Number of Points", inputId = "points",
+                  min = 1, max = 10000, value = 500)
+    ),
+    # Show the generated plot
+    mainPanel(plotOutput("Plot"))
+  )
+)
+
+# Define server logic required to sort data and draw plot
+server <- function(input, output) {
+  output$Plot <- renderPlot({ hist(rnorm(input$points)) })
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+```
+
+
+
+
+---
+# A Shiny App
+
+```{r, eval = FALSE}
+# load packages
+library(shiny)
+
+# Define what the user sees
+ui <- fluidPage(
+  # Sidebar with input for user to control 
+  sidebarLayout(  #<<
+    sidebarPanel( #<<
+      sliderInput(label = "Number of Points", inputId = "points", #<<
+                  min = 1, max = 10000, value = 500) #<<
+    ),
+    # Show the generated plot
+    mainPanel(plotOutput("Plot")) #<<
+  )
+)
+
+# Define server logic required to sort data and draw plot
+server <- function(input, output) {
+  output$Plot <- renderPlot({ hist(rnorm(input$points)) })  #<<
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+```
+
+
