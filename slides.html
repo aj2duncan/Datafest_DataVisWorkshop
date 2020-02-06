@@ -70,7 +70,7 @@ Image Source: https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/
 ---
 # A Shiny App
 
-Either single `app.R` or `ui.R` and `server.R`
+Single `app.R` file
 
 
 ```r
@@ -153,6 +153,116 @@ server &lt;- function(input, output) {
 # Run the application 
 shinyApp(ui = ui, server = server)
 ```
+
+---
+class: inverse, center, middle
+
+# Let's Get Started
+
+### Open RStudio and we'll begin with a tour
+
+
+---
+# Opening an App
+
+&lt;img src="images/RStudio.png" width="100%" style="display: block; margin: auto;" /&gt;
+---
+# App01 Histogram
+
+- Pretty much be as earlier slide. 
+
+- Click **Run App**.
+
+- Move the slider, what happens.
+
+--
+
+- **Exercise:** Change the minimum value of the slider to 100 and the starting value to 1000
+
+---
+# App02 Plotly Histogram
+
+Some new things (for the most part replacing `plot` with `plot_ly`)
+
+
+```r
+library(plotly)
+```
+
+
+```r
+mainPanel(plotlyOutput("Plot"))
+```
+
+
+```r
+output$Plot &lt;- renderPlotly({ ...
+```
+  
+
+```r
+plot_ly(data_to_plot, x = ~x, type = "histogram")
+```
+
+--
+
+- **Exercise:** Change name of the plot to *Plotly*. Where do you need to make the changes?
+
+- Feel free to make other changes too.
+
+
+---
+# App03 Scatterplot
+
+- Uses `plotly` and a built in dataset to `R` - `diamonds`.
+
+- Slider controls number of points to plot.
+
+- We sample from the dataset.
+
+- Before you move the slider, what do you expect to happen.
+
+--
+
+- **Exercise:** Instead of colouring by *cut*, use the variable *clarity*. 
+
+---
+# App 04 Two Inputs
+
+- Now we can add another input
+
+- `selectizeInput()` allows more than one value
+
+- Change the *cut* selection and change the slider - what happens?
+
+--
+
+- **Exercise**: Create a vector of choices using:
+
+
+```r
+cut_choices &lt;- c("Fair", "Good", "Very Good", "Premium", "Ideal")
+```
+
+and replace the vectors in `selectizeInput()` with it. Where should it go?
+
+---
+# App 05 Barplot
+
+- Keeping the two inputs we can use a barplot.
+
+--
+
+- **Note:** 
+
+    - We are using functions from another package to help with the data (`dplyr`)
+
+    - With `plotly` we need to count the data before plotting, not the same in all packages.
+    
+    
+--
+
+- **Exercise**: What would happen if you remove `color = ~cut`? Find out. Can you change the default single colour? *Hint: `color = I("choice")`*.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

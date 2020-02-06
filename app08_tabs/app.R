@@ -12,8 +12,6 @@ ui <- fluidPage(
     # Sidebar with inputs for user to control 
     sidebarLayout(
         sidebarPanel(
-            selectInput(label = "Type of plot", inputId = "plot_type",
-                        choices = c("Bar Chart", "Scatterplot")),
             sliderInput(label = "Number of Diamonds",
                         inputId = "diamonds",
                         min = 1, max = 10000, value = 500),
@@ -27,16 +25,19 @@ ui <- fluidPage(
         
         # Show the generated plot
         mainPanel(
-            plotlyOutput("diamondsPlot")
+            tabsetPanel(
+                tabPanel(title = "Scatter", plotlyOutput("diamondsPlot_scatter")),
+                tabPanel(title = "Bar Chart", plotlyOutput("diamondsPlot_bar"))
+            )
         )
+        
     )
 )
 
 # Define server logic required to sort data and draw plot
 server <- function(input, output) {
     
-    # separate data handling from plotting
-    data_to_plot <- reactive({
+    output$diamondsPlot_scatter <- renderPlotly({
         # gather info from user but only when asked
         num_diamonds <- isolate(input$diamonds)
         types_cut <- isolate(input$cut)
@@ -49,29 +50,31 @@ server <- function(input, output) {
         # filter cut
         diamonds_to_plot <- filter(diamonds_to_plot, cut %in% types_cut)
         
-        # return data to plot
-        return(diamonds_to_plot)    
+        # draw scatterplot
+        plot_ly(data = diamonds_to_plot, x = ~carat,
+                y = ~price, color = ~cut, type = "scatter", mode = "markers") 
     })
     
-    output$diamondsPlot <- renderPlotly({
+    output$diamondsPlot_bar <- renderPlotly({
+        # gather info from user but only when asked
+        num_diamonds <- isolate(input$diamonds)
+        types_cut <- isolate(input$cut)
         
-        # NOTE: At the momemnt type of chart isn't isolated, so if it changes
-        # a new chart will be drawn instantly
+        # listen to go button
+        input$go
         
-        # draw correct plot
-        if (input$plot_type == "Bar Chart") {
-            # count each type of cut
-            counted_data <- count(data_to_plot(), cut)
-            # draw bar chart
-            plot_ly(data = counted_data, x = ~cut, y = ~n, color = ~cut,
-                    type = "bar")
-        } else {
-            # draw scatterplot
-            plot_ly(data = data_to_plot(), x = ~carat,
-                    y = ~price, color = ~cut, type = "scatter", mode = "markers")
-            
-        }
+        # sample correct number
+        diamonds_to_plot <- sample_n(diamonds, num_diamonds)
+        # filter cut
+        diamonds_to_plot <- filter(diamonds_to_plot, cut %in% types_cut)
+        
+        # count each type of cut
+        counted_data <- count(diamonds_to_plot, cut)
+        # draw bar chart
+        plot_ly(data = counted_data, x = ~cut, y = ~n, color = ~cut,
+                type = "bar")
     })
+    
 }
 
 # Run the application 

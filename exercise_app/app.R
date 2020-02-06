@@ -4,7 +4,7 @@ library(readr)
 library(dplyr)
 library(plotly)
 
-# read in weather data hint: weather <- read_csv("../data/weather.csv")
+# read in weather data hint: weather <- read_csv("weather.csv")
 
 
 # Define what the user sees
