@@ -19,7 +19,7 @@ install.packages(c("shiny", "plotly", "dplyr", "readr"), dependencies = TRUE)
 
 ## Shiny Applications
 
-Each folder contains a file called `app.R` which is a [shiny](https://shiny.rstudio.com/) application. If you open these in RStudio then you can click on `Run App` to run the application.
+Each folder contains a file called `app.R` which is a [shiny](https://shiny.rstudio.com/) application. If you open these in RStudio then you can click on `Run App` to run the application. It will hopefully look something like the image below.
 
-
+![](images/RStudio.png)
 
