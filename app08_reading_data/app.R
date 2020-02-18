@@ -2,7 +2,7 @@
 library(shiny)
 library(readr)
 library(dplyr)
-library(leaflet)
+library(plotly)
 
 # weather data produced by the met office 
 # https://www.metoffice.gov.uk/research/climate/maps-and-data/historic-station-data
@@ -19,8 +19,11 @@ ui <- fluidPage(
     # Sidebar with inputs for user to control 
     sidebarLayout(
         sidebarPanel(
-            selectInput(inputId = "location", label = "Choose Location",
-                        choices = c("Cambridge", "Eastbourne", "Nairn", "Tiree"))
+            sliderInput(inputId = "years", label = "Choose years:",
+                        min = min(weather$year),
+                        max = max(weather$year),
+                        value= c(min(weather$year),max(weather$year)), 
+                        sep = "")
         ), 
         
         # Show the generated plot
@@ -34,14 +37,17 @@ server <- function(input, output) {
     
     output$plot <- renderPlotly({
         # collect data from user
-        user_choice = input$location
+        years_to_show = input$years
         
         # filter data
-        weather_to_plot <- filter(weather, location == user_choice)
+        weather_to_plot <- filter(weather, 
+                                  between(year, 
+                                          left = min(years_to_show),
+                                          right = max(years_to_show)))
         
         # plot data
-        plot_ly(weather_to_plot, x = ~date, y = ~rain, 
-                type = "scatter", mode = "markers+lines")
+        plot_ly(weather_to_plot, x = ~location, y = ~sun, 
+                type = "box")
     })
     
 }

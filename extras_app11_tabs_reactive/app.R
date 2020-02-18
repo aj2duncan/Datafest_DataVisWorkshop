@@ -5,10 +5,10 @@ library(plotly)
 
 # Define what the user sees
 ui <- fluidPage(
-
+    
     # Application title
     titlePanel("Diamonds"),
-
+    
     # Sidebar with inputs for user to control 
     sidebarLayout(
         sidebarPanel(
@@ -19,36 +19,54 @@ ui <- fluidPage(
                            inputId = "cut", 
                            choices = c("Fair", "Good", "Very Good", "Premium", "Ideal"),
                            selected = c("Fair", "Good", "Very Good", "Premium", "Ideal"),
-                           multiple = TRUE)
+                           multiple = TRUE),
+            actionButton(inputId = "go", label = "Plot Data")
         ),
-
+        
         # Show the generated plot
         mainPanel(
-           plotlyOutput("diamondsPlot")
+            tabsetPanel(
+                tabPanel(title = "Scatter", plotlyOutput("diamondsPlot_scatter")),
+                tabPanel(title = "Boxplots", plotlyOutput("diamondsPlot_box"))
+            )
         )
+        
     )
 )
 
 # Define server logic required to sort data and draw plot
 server <- function(input, output) {
-
-    output$diamondsPlot <- renderPlotly({
-        # gather info from user
-        num_diamonds <- input$diamonds
-        types_cut <- input$cut
+    
+    # separate data handling from plotting
+    data_to_plot <- reactive({
+        # gather info from user but only when asked
+        num_diamonds <- isolate(input$diamonds)
+        types_cut <- isolate(input$cut)
+        
+        # listen to go button
+        input$go
         
         # sample correct number
         diamonds_to_plot <- sample_n(diamonds, num_diamonds)
         # filter cut
         diamonds_to_plot <- filter(diamonds_to_plot, cut %in% types_cut)
-        
-        # count each type of cut
-        counted_diamonds <- count(diamonds_to_plot, cut)
-        
-        # draw barchart
-        plot_ly(data = counted_diamonds, x = ~cut, y = ~n, color = ~cut,
-                type = "bar")
+    
+        # return data to plot
+        return(diamonds_to_plot)    
     })
+    
+    output$diamondsPlot_scatter <- renderPlotly({
+        # draw scatterplot
+        plot_ly(data = data_to_plot(), x = ~carat,
+                y = ~price, color = ~cut, type = "scatter", mode = "markers") 
+    })
+    
+    output$diamondsPlot_box <- renderPlotly({
+        # draw boxplots
+        plot_ly(data = data_to_plot(), x = ~cut, y = ~price, color = ~cut,
+                type = "box")
+    })
+    
 }
 
 # Run the application 

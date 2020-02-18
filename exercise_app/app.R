@@ -15,7 +15,7 @@ ui <- fluidPage(
   # Sidebar with input for user to control 
   sidebarLayout(
     sidebarPanel(
-      sliderInputInput(label = "",
+      sliderInput(label = "",
                   inputId = "",
                   min = , max = , value = c(, ))
     ),

@@ -27,7 +27,7 @@ ui <- fluidPage(
         mainPanel(
             tabsetPanel(
                 tabPanel(title = "Scatter", plotlyOutput("diamondsPlot_scatter")),
-                tabPanel(title = "Bar Chart", plotlyOutput("diamondsPlot_bar"))
+                tabPanel(title = "Boxplots", plotlyOutput("diamondsPlot_box"))
             )
         )
         
@@ -55,7 +55,7 @@ server <- function(input, output) {
                 y = ~price, color = ~cut, type = "scatter", mode = "markers") 
     })
     
-    output$diamondsPlot_bar <- renderPlotly({
+    output$diamondsPlot_box <- renderPlotly({
         # gather info from user but only when asked
         num_diamonds <- isolate(input$diamonds)
         types_cut <- isolate(input$cut)
@@ -68,11 +68,9 @@ server <- function(input, output) {
         # filter cut
         diamonds_to_plot <- filter(diamonds_to_plot, cut %in% types_cut)
         
-        # count each type of cut
-        counted_data <- count(diamonds_to_plot, cut)
-        # draw bar chart
-        plot_ly(data = counted_data, x = ~cut, y = ~n, color = ~cut,
-                type = "bar")
+        # draw boxplots
+        plot_ly(data = diamonds_to_plot, x = ~cut, y = ~price, color = ~cut,
+                type = "box")
     })
     
 }

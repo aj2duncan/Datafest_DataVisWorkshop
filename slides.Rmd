@@ -25,9 +25,9 @@ theme_set(theme_gray(base_size = 18))
 
 - Housekeeping
 
-- Laptops
+- Computers
 
-- Experience? (R/Shiny/...)
+- ...
 
 ---
 # Plan for the afternoon
@@ -67,7 +67,7 @@ Image Source: https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/
 
 --
 
-- Lots of example apps to work with
+- Some apps to work with (and others for later)
 
 - A larger app for you to build
 
@@ -247,36 +247,27 @@ and replace the vectors in `selectizeInput()` with it. Where should it go?
 ---
 # App 05 Barplot
 
-- Keeping the two inputs we can use a barplot.
+- Keeping the two inputs we can use a boxplot.
+
+- **Note:** You'll see that we have changed the `x = ~` to a different variable.
 
 --
 
-- **Note:** 
-
-- We are using functions from another package to help with the data (`dplyr`)
-
-- With `plotly` we need to count the data before plotting, not the same in all packages.
-
-
---
-
-- **Exercise**: What would happen if you remove `color = ~cut`? Find out. Can you change the default single colour? *Hint: `color = I("choice")`*. 
+- **Exercise**: What would happen if you remove `color = ~cut`? Find out. Can you change the default single colour? *Hint: `color = I("pink")`*. 
 
 ---
 # App 06 Choose Plots
 
 - Alternatively we can let the user choose how to display the data.
 
-- We now have a `selectInput()` and 
+- We now have another input - `selectInput()` and 
 
 ```{r}
 # draw correct plot
-if (input$plot_type == "Bar Chart") { #<<
-  # count each type of cut
-  counted_diamonds <- count(diamonds_to_plot, cut)
-  # draw bar chart
-  plot_ly(data = counted_diamonds, x = ~cut, y = ~n, color = ~cut,
-          type = "bar")
+if (input$plot_type == "Boxplots") { #<<
+  # draw boxplots
+  plot_ly(data = diamonds_to_plot, x = ~cut, y = ~price, color = ~cut,
+          type = "box")
 } else {  #<<
   # draw scatterplot
   plot_ly(data = diamonds_to_plot, x = ~carat,
@@ -287,7 +278,7 @@ if (input$plot_type == "Bar Chart") { #<<
 
 --
 
-- **EXercise:** Change things so that the code checks if `input$plot_type == "Scatterplot"` it draws a scatterplot `else` it draws a barplot.
+- **EXercise:** Change things so that the code checks if `input$plot_type == "Scatterplot"` it draws a scatterplot `else` it draws a boxplot.
 
 ---
 class: center, middle
@@ -331,42 +322,53 @@ input$go
 
 - **Exercise:** `isolate()` the type of chart. 
 
----
-# App 08 Tabs
-
-- We can also display different plots in different tabs. 
-
-- Need two plotting functions and two tabs
-
-```{r}
-tabsetPanel(
-  tabPanel(title = "Scatter", plotlyOutput("diamondsPlot_scatter")),
-  tabPanel(title = "Bar Chart", plotlyOutput("diamondsPlot_bar"))
-)
-```
-
 --
 
-- **Exercise:** There is some redundancy in this app, identify the repeated lines. We will fix this in a minute.
+- **Extras:** There are many other ways to display shiny apps. I have created two additional apps
+
+    - `extras_app10_tabs`: Uses a different tab for each plot
+    - `extras_app11_tabs_reactive`: Similar to `extras_app10_tabs` but it removes a lot of repetitive code.
+
 
 ---
-# App 09 Data Processing
+# App 08 Reading in Data
 
-- Rather than repeating same processing, can process once & plot twice.
-
-- We wrap the processing in `reactive({})` and then call the reactive function when needed.
-
----
-# App 10 Reading in Data
-
-- Last thing we're going to look at today is doing this with your own data.
+- Last thing we're going to look at today (before trying one yourself) is doing this with your own data.
 
 - Ideally in csv format and rectangular (with column names without spaces)
 
 - Use `read_csv("filename.extenxion)` and remember to load `readr` package too.
 
+--
 
+- **Note:** Now using the `sliderInput()` but with **2** values. This creates a two slider values to move. 
 
+--
 
+- **Exercise:** Add come code to the `plot_ly()` command to change the colour of the boxplot depending on the *location*.
+
+---
+class: center, middle
+
+# Your turn ... 
+
+---
+# Your Turn
+
+- Open the `exercise_app` folder and then `app.R`.
+
+- Feel free to copy and paste code from earlier apps.
+
+--
+
+- **Task 1**: Read in `weather.csv` and create boxplots of *sun* for each location.
+
+- **Task 2**: Add a `selectizeInput()` to choose location.
+
+- **Task 3**: Add an additional plot. *sun* vs *date* as a *scatterplot*. 
+
+- **Task 4**: `isolate()` all the inputs. 
+
+- **Task 5**: By investigating the extra apps, try to display the two plots in 
 
 
