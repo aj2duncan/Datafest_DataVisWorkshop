@@ -5,7 +5,7 @@ library(plotly)
 # Define what the user sees
 ui <- fluidPage(
   
-  titlePanel("Plotly Histogram")
+  titlePanel("Plotly Histogram"),
   
   # Sidebar with input for user to control 
   sidebarLayout(
@@ -23,8 +23,12 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   output$Plot <- renderPlotly({ 
+    # gather info from user
+    num_points <- input$points
+    
     # create data - needs to be a data frame (rectangular)    
-    data_to_plot = data.frame(x = rnorm(input$points))
+    data_to_plot = data.frame(x = rnorm(num_points))
+    
     # plot data
     plot_ly(data_to_plot, x = ~x, type = "histogram")
     

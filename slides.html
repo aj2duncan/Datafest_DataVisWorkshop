@@ -21,11 +21,13 @@ class: center, middle, inverse, title-slide
 
 # Welcome
 
+- Introductions
+
 - Housekeeping
 
-- Laptops
+- Computers
 
-- Experience? (R/Shiny/...)
+- Experience?
 
 ---
 # Plan for the afternoon
@@ -33,6 +35,18 @@ class: center, middle, inverse, title-slide
 &lt;img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/shiny.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 Image Source: https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/shiny.png
+---
+# Plan for the afternoon
+
+- Show you a little of what **Shiny** can do
+
+- Either you can do more yourself 
+
+- Or you can find something that will be useful for your business in the future
+
+- There are many alternatives: *Tableau* and *Microsoft Power BI* to name just two.
+
+
 ---
 # R
 
@@ -44,28 +58,166 @@ Image Source: https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/
 
 --
 
--  My experience with Shiny:
+- My experience with Shiny:
 
-- Built shiny apps for both internal and external use
+- Build shiny apps for both internal and external use
 
-- External: Online calculators/Teaching tools
+    - External: Online calculators/models/teaching tools
 
-- Internal: Automated Reporting 
+    - Internal: Automated Reporting/Disease Mapping 
 
 ---
 # Today
 
-- Interactive plots using [plotly](https://plot.ly/r/) package.
+- Quick general intro
 
-- Controlling User input.
+- Building **Shiny apps**
+
+- Interactive plots
+
+- Controlling User input
 
 - Reactivity
 
 --
 
-- Lots of example apps to work with
+- Some apps to work with (and others for later)
 
-- A larger app for you to build
+- An app for you to build using what we've looked at
+
+---
+# Some `R` Basics
+
+
+- `R` statistical programming language
+
+- Code based, write code files and run them
+
+- Very flexible, interactive and no compilation needed
+
+---
+# Some `R` Basics
+
+- Some example code:
+
+
+```r
+prime &lt;- c(2, 3, 5, 7, 11) # save with &lt;-
+prime                      # print
+```
+
+```
+[1]  2  3  5  7 11
+```
+
+
+```r
+mean(prime)
+```
+
+```
+[1] 5.6
+```
+
+```r
+length(prime)
+```
+
+```
+[1] 5
+```
+
+```r
+prime / 2                  # vectorised!
+```
+
+```
+[1] 1.0 1.5 2.5 3.5 5.5
+```
+
+---
+# Some `R` Basics
+
+or we can plot things
+
+
+```r
+some_data &lt;- rnorm(n = 1000, mean = 0, sd = 1) # normal dist.
+hist(some_data, main = "Histogram") 
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Some `R` Basics
+
+- Can add functionality with **packages**
+
+- **Shiny** is one of those packages.
+
+
+```r
+library(shiny) # load packages using library(...)
+```
+
+--
+
+- We'll also be using the [plotly](https://plot.ly/r/) package
+
+--
+
+- **Shiny** is a little different to normal `R` code.
+
+--
+
+- Normal `R` code gets run line by line. Edit, Run, Edit, Run ... 
+
+- **Shiny** gets run pretty much all at once and doesn't stop running until you tell it to. 
+
+- **Shiny** lets you change inputs `\(\rightarrow\)` reruns code.
+
+---
+class: center, middle
+
+# Shiny
+
+---
+# Shiny
+
+- A **Shiny** app has two main parts: **ui** and **server**
+
+- **ui** controls the *user interface*
+
+- **server** works behind the scenes
+
+--
+
+- Let's start with an example
+
+---
+class: inverse, center, middle
+
+# Let's Get Started
+
+### Open RStudio and we'll run our first app
+
+
+---
+# Opening an App
+
+&lt;img src="images/RStudio.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# App01 Histogram
+
+- Click **Run App**.
+
+- Move the slider, what happens?
+
+--
+
+- Let's look at things in a bit more detail
 
 ---
 # A Shiny App
@@ -94,34 +246,20 @@ shinyApp(ui = ui, server = server)
 ---
 # A Shiny App
 
+Concentrate on **ui** and **server**
+
 
 ```r
-# load packages
-library(shiny)
-
 # Define what the user sees
 ui &lt;- fluidPage(
-  # Sidebar with input for user to control 
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput(label = "Number of Points", inputId = "points",
-                  min = 1, max = 10000, value = 500)
-    ),
-    # Show the generated plot
-    mainPanel(plotOutput("Plot"))
-  )
+  # what the user sees
 )
 
 # Define server logic required to sort data and draw plot
 server &lt;- function(input, output) {
-  output$Plot &lt;- renderPlot({ hist(rnorm(input$points)) })
+  # what actually does the work behind the scenes
 }
-
-# Run the application 
-shinyApp(ui = ui, server = server)
 ```
-
-
 
 
 ---
@@ -129,14 +267,53 @@ shinyApp(ui = ui, server = server)
 
 
 ```r
-# load packages
-library(shiny)
-
 # Define what the user sees
 ui &lt;- fluidPage(
   # Sidebar with input for user to control 
-* sidebarLayout(
-*   sidebarPanel(
+  sidebarLayout( 
+    sidebarPanel( 
+*     sliderInput(label = "Number of Points", inputId = "points",
+*                 min = 1, max = 10000, value = 500)
+    ), 
+    # Show the generated plot 
+*   mainPanel(plotOutput("Plot"))
+  )
+)
+```
+
+
+---
+# A Shiny App
+
+
+```r
+# Define server logic required to sort data and draw plot
+server &lt;- function(input, output) {
+  # generate plot
+  output$Plot &lt;- renderPlot({ 
+    # gather info from user
+*   num_points &lt;- input$points
+    
+    # create data
+*   data_to_plot &lt;- data.frame(x = rnorm(num_points))
+    
+    # create plot
+*   hist(data_to_plot$x, main = "Histogram")
+  })
+}
+```
+
+
+---
+# A Shiny App
+
+
+```r
+# Define what the user sees
+ui &lt;- fluidPage(
+  # Sidebar with input for user to control 
+  sidebarLayout(  
+    sidebarPanel( 
 *     sliderInput(label = "Number of Points", inputId = "points",
 *                 min = 1, max = 10000, value = 500)
     ),
@@ -147,37 +324,40 @@ ui &lt;- fluidPage(
 
 # Define server logic required to sort data and draw plot
 server &lt;- function(input, output) {
-* output$Plot &lt;- renderPlot({ hist(rnorm(input$points)) })
+* output$Plot &lt;- renderPlot({
+    # gather info from user
+*   num_points &lt;- input$points
+    # ... 
+  })  
 }
-
-# Run the application 
-shinyApp(ui = ui, server = server)
 ```
 
 ---
-class: inverse, center, middle
-
-# Let's Get Started
-
-### Open RStudio and we'll begin with a tour
-
-
----
-# Opening an App
-
-&lt;img src="images/RStudio.png" width="100%" style="display: block; margin: auto;" /&gt;
----
 # App01 Histogram
 
-- Pretty much be as earlier slide. 
+- Right back to the app we opened earlier... 
 
-- Click **Run App**.
+- **Exercise** 
 
-- Move the slider, what happens.
+Change the minimum value of the slider to 100 and the starting value to 1000
 
---
+---
+class: center, middle
 
-- **Exercise:** Change the minimum value of the slider to 100 and the starting value to 1000
+# Plotly
+
+---
+# Plotly
+
+- Whilst the app is interactive the plot isn't
+
+- **Plotly** gives us a quick way to add interactivity
+
+    - Lots of actions built in (tooltips, zoom, export)
+
+    - Can customise much of it (not going to look at that here)
+
+- We need to make a few changes to the app
 
 ---
 # App02 Plotly Histogram
@@ -186,45 +366,99 @@ Some new things (for the most part replacing `plot` with `plot_ly`)
 
 
 ```r
+# load the new package
 library(plotly)
 ```
 
 
 ```r
+# change the output type slightly
 mainPanel(plotlyOutput("Plot"))
 ```
 
 
 ```r
+# change the render type slightly
 output$Plot &lt;- renderPlotly({ ... })
 ```
 
 
 ```r
+# change the plotting function
 plot_ly(data_to_plot, x = ~x, type = "histogram")
 ```
 
 --
 
-- **Exercise:** Change name of the plot to *Plotly*. Where do you need to make the changes?
+- **Exercise** 
 
-- Feel free to make other changes too.
+Change the name **Shiny** uses for the plot to *Plotly*. Where do you need to make the changes?
 
+Feel free to make other changes too.
+
+---
+# Plotly Commands and Data Storage
+
+- Before we go much further let's just look at that `plotly` command. 
+
+- We give it a dataset, tell it which columns to use for the axes, and the plot type.
+
+
+```r
+plot_ly(data = ..., x = ~x_column, y = ~y_column, type = "...", 
+        ...)
+```
+
+--
+
+- We're going to use data stored in two formats today: 
+
+    - Data frame (like a single Excel Spreadsheet)
+    
+    - Vectors (like a single column/row of Excel Spreadsheet)
+
+- Later we'll look at reading in our own data.
+
+- Now another type of plot.
 
 ---
 # App03 Scatterplot
 
-- Uses `plotly` and a built in dataset to `R` - `diamonds`.
+- Uses `plotly` and a built in dataset - `diamonds`.
+
+
+```r
+head(diamonds)
+```
+
+```
+# A tibble: 6 x 10
+  carat cut       color clarity depth table price     x     y     z
+  &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 0.23  Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+2 0.21  Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+3 0.23  Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+4 0.290 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+5 0.31  Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+6 0.24  Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+```
+
+---
+# App03 Scatterplot
+
+- Uses `plotly` and a built in dataset - `diamonds`.
 
 - Slider controls number of points to plot.
 
-- We sample from the dataset.
-
 - Before you move the slider, what do you expect to happen.
+
+- Try zooming in and then mouseover individual point. Can you reset the plot?
 
 --
 
-- **Exercise:** Instead of colouring by *cut*, use the variable *clarity*. 
+- **Exercise** 
+
+Instead of colouring by *cut*, use the variable *clarity*. 
 
 ---
 # App 04 Two Inputs
@@ -237,60 +471,73 @@ plot_ly(data_to_plot, x = ~x, type = "histogram")
 
 --
 
-- **Exercise**: Create a vector of choices using:
+- **Exercise** 
+
+Change the maximum value of the slider to `nrow(diamonds)` so we can plot all the data. 
+
+Can you change the minimum value too - say a quarter of all the data?
+
+--
+
+- **Advanced Exercise** 
+
+We have some repetition in the app. Create a vector of choices and replace the vectors in `selectizeInput()` with it. Where should it go? 
+**Hint:** 
 
 
 ```r
 cut_choices &lt;- c("Fair", "Good", "Very Good", "Premium", "Ideal")
 ```
 
-and replace the vectors in `selectizeInput()` with it. Where should it go?
+
 
 ---
-# App 05 Barplot
+# App 05 Boxplot
 
-- Keeping the two inputs we can use a barplot.
+- Keeping the two inputs we can use boxplots instead.
+
+- **Note:** You'll see that we have changed the `x = ~... ` to a category.
+
+
+```r
+# draw boxplots
+plot_ly(data = diamonds_to_plot, x = ~cut, y = ~price, color = ~cut,
+        type = "box")
+```
 
 --
 
-- **Note:** 
+- **Exercise** 
 
-- We are using functions from another package to help with the data (`dplyr`)
-
-- With `plotly` we need to count the data before plotting, not the same in all packages.
-
-
---
-
-- **Exercise**: What would happen if you remove `color = ~cut`? Find out. Can you change the default single colour? *Hint: `color = I("choice")`*. 
+What would happen if you remove `color = ~cut`? Find out. Can you change the default single colour? *Hint: `color = I("pink")`*. 
 
 ---
 # App 06 Choose Plots
 
 - Alternatively we can let the user choose how to display the data.
 
-- We now have a `selectInput()` and 
+- We now have another input - `selectInput()` and an `if()` statement
 
 
 ```r
 # draw correct plot
-*if (input$plot_type == "Bar Chart") {
-  # count each type of cut
-  counted_diamonds &lt;- count(diamonds_to_plot, cut)
-  # draw bar chart
-  plot_ly(data = counted_diamonds, x = ~cut, y = ~n, color = ~cut,
-          type = "bar")
+*if (input$plot_type == "Boxplots") {
+  # draw boxplots
+  plot_ly(data = diamonds_to_plot, x = ~cut, y = ~price, 
+          color = ~cut, type = "box")
 *} else {
   # draw scatterplot
-  plot_ly(data = diamonds_to_plot, x = ~carat,
-          y = ~price, color = ~cut, type = "scatter", mode = "markers")
+  plot_ly(data = diamonds_to_plot, x = ~carat, y = ~price, 
+          color = ~cut, type = "scatter", mode = "markers")
   
 *} 
 ```
 
 --
 
-- **EXercise:** Change things so that the code checks if `input$plot_type == "Scatterplot"` it draws a scatterplot `else` it draws a barplot.
+- **Exercise** 
+
+Change the order so that the code checks if `input$plot_type == "Scatterplot"` it draws a scatterplot `else` it draws a boxplot.
 
 ---
 class: center, middle
@@ -310,9 +557,9 @@ class: center, middle
 
 --
 
-- Unless told otherwise shiny listens all the time.
+- Unless told otherwise **shiny** listens all the time.
 
-- We need to *isolate()* the bits we don't want to listen too.
+- We need to `isolate()` the bits we don't want to listen too.
 
 ---
 # App 07 Reactivity
@@ -333,42 +580,169 @@ input$go
 
 --
 
-- **Exercise:** `isolate()` the type of chart. 
+- **Exercise** 
+
+`isolate()` the type of chart and/or remove the isolation from something else. 
 
 ---
-# App 08 Tabs
+# App 08 Reading in Data
 
-- We can also display different plots in different tabs. 
+- Last thing we're going to look at today (before trying one yourself) is doing this with your own data.
 
-- Need two plotting functions and two tabs
+- Ideally in *csv* format and rectangular (with column names without spaces)
+
+- Load `readr` package and use `read_csv("filename.csv)`.
 
 
 ```r
-tabsetPanel(
-  tabPanel(title = "Scatter", plotlyOutput("diamondsPlot_scatter")),
-  tabPanel(title = "Bar Chart", plotlyOutput("diamondsPlot_bar"))
-)
+library(readr)
+weather &lt;- read_csv("weather.csv")
+head(weather)
+```
+
+
+```
+# A tibble: 6 x 8
+  date        year location   tmax  tmin    af  rain   sun
+  &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 1990-01-01  1990 Cambridge   9.8   4       0  43.8  64.7
+2 1990-02-01  1990 Cambridge  11.4   4.7     1  71.1 102  
+3 1990-03-01  1990 Cambridge  12.9   4.7     3  23.2 153. 
+4 1990-04-01  1990 Cambridge  13.5   3.1     7  28.2 206. 
+5 1990-05-01  1990 Cambridge  19.1   6.7     0   6.2 226. 
+6 1990-06-01  1990 Cambridge  19.2   9.8     0  30.1 112. 
+```
+
+---
+# App 08 Reading in Data
+
+- Read in **weather** data and use as we did with **diamonds**.
+
+- Now using the `sliderInput()` but with **2** values. This creates two slider values to move. 
+
+
+```r
+sliderInput(...,min = min(weather$year), max = max(weather$year),
+            value= c(min(weather$year), max(weather$year))) 
+```
+
+- Filtering the data `between()` years based on slider values.
+
+
+```r
+filter(weather, between(year, left = min(slider_years), 
+                        right = max(slider_years)))
 ```
 
 --
 
-- **Exercise:** There is some redundancy in this app, identify the repeated lines. We will fix this in a minute.
+- **Exercise** 
+
+Add some code to the `plot_ly()` command to change the colour of the boxplot depending on the *location*.
 
 ---
-# App 09 Data Processing
+class: center, middle
 
-- Rather than repeating same processing, can process once &amp; plot twice.
-
-- We wrap the processing in `reactive({})` and then call the reactive function when needed.
+# Your turn ... 
 
 ---
-# App 10 Reading in Data
+# Your Turn
 
-- Last thing we're going to look at today is doing this with your own data.
+- Open the `exercise_app` folder and then `app.R`.
 
-- Ideally in csv format and rectangular (with column names without spaces)
+- Feel free to copy and paste code from earlier apps.
 
-- Use `read_csv("filename.extenxion)` and remember to load `readr` package too.
+- Start with **Task 1** and then feel free to try the others or work on anything else you'd like.
+
+- Please ask questions
+
+---
+# Your Turn
+
+- **Task 1**: Read in `weather.csv` and create boxplots of *rain* for each location. *You can copy and paste a lot of code from app 08 - just need to change a few things.*
+
+- **Task 2**: Add a `selectizeInput()` to choose location.
+
+- **Task 3**: Add an additional plot. *rain* vs *date* as a *scatterplot*. 
+
+    - Two possibilities here: Add a dropdown for the different plots as we did in app 06 or
+
+    - You can add another plot below the first
+
+
+```r
+mainPanel(plotlyOutput("plot1"), plotlyOutput("plot2"))
+```
+
+- **Task 4**: `isolate()` some/all the inputs. If you are isolating anything you wil need to add a **go** button (or similar) like we did in app 07.
+
+- **Task 5**: By investigating the extra apps, try to display the two plots in different tabs.
+
+
+---
+class: inverse, center, middle
+
+# Next Steps
+
+---
+# More Apps ... 
+
+There are many other ways to display shiny apps. I have created some additional apps. In the *extras* folder:
+
+- `tabs`: Uses a different tab for each plot
+
+- `tabs_reactive`: Similar to `tabs` but it removes a lot of repetitive code
+
+- `shiny_documents`: A **shiny** presentation and report
+
+There are also several Shiny showcases
+
+- [Shiny Demos](https://shiny.rstudio.com/gallery/#demos)
+
+- [Shiny User Gallery](https://shiny.rstudio.com/gallery/#user-showcase)
+
+And plenty of places to learn a bit more
+
+- Excellent [Short tutorial](https://deanattali.com/blog/building-shiny-apps-tutorial/) written by very experienced shiny programmer.
+
+- The book [Mastering Shiny](https://mastering-shiny.org/), written by RStudio staff.
+
+---
+# Hosting/Deploying
+
+- Shiny apps can be hosted online or deployed internally
+
+- Online
+
+    - shinyapps.io
+
+    - Open source shiny server
+
+    - Shinyproxy (open source with authentication)
+
+- Internal
+
+    - Open source (Behind firewall)
+
+    - Shinyproxy
+
+    - Share the code - like we did here
+
+---
+# Summary
+
+- **Shiny** turns `R` code into interactive web app
+
+- **Plotly** automatically adds zoom/tooltip/export/... 
+
+- All open source and reproducible
+
+---
+class: inverse, center, middle
+
+# Thanks for coming
+
+### Any questions
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
