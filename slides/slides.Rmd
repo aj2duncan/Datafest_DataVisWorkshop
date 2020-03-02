@@ -16,7 +16,9 @@ output:
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE, warning = FALSE,
                       message = FALSE, comment = NA)
-library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
 theme_set(theme_gray(base_size = 18))
 ```
 

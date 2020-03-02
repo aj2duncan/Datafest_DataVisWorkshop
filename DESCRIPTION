@@ -1,0 +1,23 @@
+Type: Compendium
+Package: Datafest Intro Data Visualisation Workshop
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.1
+Authors@R: 
+    person(given = "Andrew",
+           family = "Duncan",
+           role = c("aut", "cre"),
+           email = "andrew.duncan.ic@uhi.ac.uk",
+           comment = c(ORCID = "https://orcid.org/0000-0002-7314-9629"))
+Description: Shiny apps and presentation for Introduction
+    to Interactive Data Visualisation Workshop in R
+Depends: 
+    dplyr,
+    knitr,
+    plotly,
+    readr,
+    rmarkdown,
+    shiny,
+    tidyverse,
+    xaringan
+Encoding: UTF-8
+LazyData: true
