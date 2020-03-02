@@ -1,7 +1,5 @@
 Type: Compendium
 Package: Datafest Intro Data Visualisation Workshop
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.1
 Authors@R: 
     person(given = "Andrew",
            family = "Duncan",

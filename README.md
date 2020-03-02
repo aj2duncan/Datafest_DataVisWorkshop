@@ -5,7 +5,7 @@ This repository contains all the materials needed for the Introduction to Data V
 You can run the code by clicking on the button below to launch a [binder](https://mybinder.org/), created via the [holepunch](https://karthik.github.io/holepunch/index.html) package.
 
 <!-- badges: start -->
-[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aj2duncan/Datafest_ShinyIntro/master?urlpath=rstudio)
+[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aj2duncan/Datafest_DataVisWorkshop/master?urlpath=rstudio)
 <!-- badges: end -->
 
 Or you can install everything on your own machine.
