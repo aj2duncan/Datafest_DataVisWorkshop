@@ -65,7 +65,7 @@ server <- function(input, output) {
         # count number of diamonds
         counted_diamonds <- count(data_to_plot(), cut)
         
-        # draw boxplots
+        # draw barplot
         plot_ly(data = counted_diamonds, x = ~cut, y = ~n, color = ~cut,
                 type = "bar")
     })

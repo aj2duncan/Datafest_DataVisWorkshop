@@ -493,7 +493,7 @@ What would happen if you remove `color = ~cut`? Find out. Can you change the def
 if (input$plot_type == "Barplot") { #<<
   # count number of diamonds
   counted_diamonds <- count(diamonds_to_plot, cut)
-  # draw boxplots
+  # draw barplots
   plot_ly(data = counted_diamonds, x = ~cut, y = ~n, color = ~cut,
           type = "bar")
 } else { #<<
@@ -507,7 +507,7 @@ if (input$plot_type == "Barplot") { #<<
 
 - **Exercise** 
 
-Change the order so that the code checks if `input$plot_type == "Scatterplot"` it draws a scatterplot `else` it draws a boxplot.
+Change the order so that the code checks if `input$plot_type == "Scatterplot"` it draws a scatterplot `else` it draws a barplot.
 
 ---
 class: center, middle
