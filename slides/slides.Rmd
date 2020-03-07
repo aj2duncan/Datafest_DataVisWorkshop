@@ -459,16 +459,20 @@ cut_choices <- c("Fair", "Good", "Very Good", "Premium", "Ideal")
 
 
 ---
-# App 05 Boxplot
+# App 05 Barplot
 
-- Keeping the two inputs we can use boxplots instead.
+- Keeping the two inputs we can use barplots instead.
 
-- **Note:** You'll see that we have changed the `x = ~... ` to a category.
+- Need to `count()` the data
+
+- **Note:** You'll see that we have changed the `x = ~... ` to a category and `y = ~...` to the count.
 
 ```{r}
-# draw boxplots
-plot_ly(data = diamonds_to_plot, x = ~cut, y = ~price, color = ~cut,
-        type = "box")
+# count number of diamonds
+counted_diamonds <- count(diamonds_to_plot, cut)
+# draw barplots
+plot_ly(data = counted_diamonds, x = ~cut, y = ~n, color = ~cut,
+        type = "bar")
 ```
 
 --
@@ -486,15 +490,16 @@ What would happen if you remove `color = ~cut`? Find out. Can you change the def
 
 ```{r}
 # draw correct plot
-if (input$plot_type == "Boxplots") { #<<
+if (input$plot_type == "Barplot") { #<<
+  # count number of diamonds
+  counted_diamonds <- count(diamonds_to_plot, cut)
   # draw boxplots
-  plot_ly(data = diamonds_to_plot, x = ~cut, y = ~price, 
-          color = ~cut, type = "box")
-} else {  #<<
+  plot_ly(data = counted_diamonds, x = ~cut, y = ~n, color = ~cut,
+          type = "bar")
+} else { #<<
   # draw scatterplot
-  plot_ly(data = diamonds_to_plot, x = ~carat, y = ~price, 
-          color = ~cut, type = "scatter", mode = "markers")
-  
+  plot_ly(data = diamonds_to_plot, x = ~carat,
+          y = ~price, color = ~cut, type = "scatter", mode = "markers")
 } #<<
 ```
 
@@ -586,6 +591,8 @@ sliderInput(...,min = min(weather$year), max = max(weather$year),
 filter(weather, between(year, left = min(slider_years), 
                         right = max(slider_years)))
 ```
+
+- Plotting boxplots, spread of data from multiple locations.
 
 --
 

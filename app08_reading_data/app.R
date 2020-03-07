@@ -21,7 +21,7 @@ ui <- fluidPage(
         sidebarPanel(
             sliderInput(inputId = "years", label = "Choose years:",
                         min = min(weather$year), max = max(weather$year),
-                        value= c(min(weather$year), max(weather$year)), 
+                        value = c(min(weather$year), max(weather$year)), 
                         sep = "") # to avoid 1,990 as we would prefer 1990
         ), 
         

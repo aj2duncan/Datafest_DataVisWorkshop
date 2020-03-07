@@ -41,10 +41,12 @@ server <- function(input, output) {
         diamonds_to_plot <- sample_n(diamonds, num_diamonds)
         # filter cut
         diamonds_to_plot <- filter(diamonds_to_plot, cut %in% types_cut)
+        # count number of diamonds
+        counted_diamonds <- count(diamonds_to_plot, cut)
         
-        # draw boxplots
-        plot_ly(data = diamonds_to_plot, x = ~cut, y = ~price, color = ~cut,
-                type = "box")
+        # draw barplots
+        plot_ly(data = counted_diamonds, x = ~cut, y = ~n, color = ~cut,
+                type = "bar")
     })
 }
 

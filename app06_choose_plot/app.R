@@ -13,7 +13,7 @@ ui <- fluidPage(
     sidebarLayout(
         sidebarPanel(
             selectInput(label = "Type of plot", inputId = "plot_type",
-                        choices = c("Boxplots", "Scatterplot")),
+                        choices = c("Barplot", "Scatterplot")),
             sliderInput(label = "Number of Diamonds",
                         inputId = "diamonds",
                         min = 1, max = 10000, value = 500),
@@ -45,15 +45,17 @@ server <- function(input, output) {
         diamonds_to_plot <- filter(diamonds_to_plot, cut %in% types_cut)
         
         # draw correct plot
-        if (input$plot_type == "Boxplots") {
+        if (input$plot_type == "Barplot") {
+            # count number of diamonds
+            counted_diamonds <- count(diamonds_to_plot, cut)
+            
             # draw boxplots
-            plot_ly(data = diamonds_to_plot, x = ~cut, y = ~price, color = ~cut,
-                    type = "box")
+            plot_ly(data = counted_diamonds, x = ~cut, y = ~n, color = ~cut,
+                    type = "bar")
         } else {
             # draw scatterplot
             plot_ly(data = diamonds_to_plot, x = ~carat,
                     y = ~price, color = ~cut, type = "scatter", mode = "markers")
-            
         }
     })
 }
