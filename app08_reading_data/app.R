@@ -19,10 +19,13 @@ ui <- fluidPage(
     # Sidebar with inputs for user to control 
     sidebarLayout(
         sidebarPanel(
-            sliderInput(inputId = "years", label = "Choose years:",
-                        min = min(weather$year), max = max(weather$year),
-                        value = c(min(weather$year), max(weather$year)), 
-                        sep = "") # to avoid 1,990 as we would prefer 1990
+            sliderInput(inputId = "year", label = "Choose years:",
+                        min = 1990, max = max(weather$year),
+                        value = max(weather$year), 
+                        sep = ""), # to avoid 1,990 as we would prefer 1990
+            numericInput(inputId = "max_temp", 
+                         label = "Maximum Monthly Temperature above:",
+                         min = 0, max = 30, value = 15)
         ), 
         
         # Show the generated plot
@@ -36,16 +39,17 @@ server <- function(input, output) {
     
     output$plot <- renderPlotly({
         # collect data from user
-        slider_years <- input$years
+        user_year <- input$year
+        max_temp <- input$max_temp
         
         # filter data
-        weather_to_plot <- filter(weather, between(year, left = min(slider_years),
-                                                         right = max(slider_years))
-        )
+        weather_to_plot <- filter(weather, year <= user_year, tmax >= max_temp)
+        # count data
+        counted_weather <- count(weather_to_plot, location)
         
         # plot data
-        plot_ly(weather_to_plot, x = ~location, y = ~sun, 
-                type = "box")
+        plot_ly(counted_weather, x = ~location, y = ~n, color = ~location, 
+                type = "bar")
     })
     
 }

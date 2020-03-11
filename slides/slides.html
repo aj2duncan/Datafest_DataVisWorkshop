@@ -48,7 +48,7 @@ Image Source: https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/
 
 --
 
-- Let's get somethings set up whilst I chat
+- Let's get somethings set up whilst I introduce things
 
 ---
 class: center, middle
@@ -544,7 +544,8 @@ What would happen if you remove `color = ~cut`? Find out. Can you change the def
 *} else {
   # draw scatterplot
   plot_ly(data = diamonds_to_plot, x = ~carat,
-          y = ~price, color = ~cut, type = "scatter", mode = "markers")
+          y = ~price, color = ~cut, type = "scatter", 
+          mode = "markers")
 *} 
 ```
 
@@ -631,31 +632,21 @@ head(weather)
 ---
 # App 08 Reading in Data
 
-- Read in **weather** data and use as we did with **diamonds**.
+- Read in **weather** data and use as we did with **diamonds**
 
-- Now using the `sliderInput()` but with **2** values. This creates two slider values to move. 
+- Using numeric input
 
+- Filter data by year
 
-```r
-sliderInput(...,min = min(weather$year), max = max(weather$year),
-            value= c(min(weather$year), max(weather$year))) 
-```
+- Filter months with Maximum temperature less than chosen.
 
-- Filtering the data `between()` years based on slider values.
-
-
-```r
-filter(weather, between(year, left = min(slider_years), 
-                        right = max(slider_years)))
-```
-
-- Plotting boxplots, spread of data from multiple locations.
+- Count number of months and plot.
 
 --
 
 - **Exercise** 
 
-Add some code to the `plot_ly()` command to change the colour of the boxplot depending on the *location*.
+Change the minimum value from 0 to -5 or change `tmax` to `tmin`.
 
 ---
 class: center, middle
@@ -665,6 +656,8 @@ class: center, middle
 ---
 # Your Turn
 
+## Two Options
+
 - Open the `exercise_app` folder and then `app.R`.
 
 - Feel free to copy and paste code from earlier apps.
@@ -673,33 +666,18 @@ class: center, middle
 
 - Please ask questions
 
+## Examine Other Resources
+
+- Alternative is to look at the extra resources.
+
 ---
 # Your Turn
 
-- **Task 1**: Read in `weather.csv` and create boxplots of *rain* for each location. *You can copy and paste a lot of code from app 08 - just need to change a few things.*
+- **Task 1**: Read in `weather.csv` and create barplots of number of months under/over a certain amount of *rain* for each location. *You can copy and paste a lot of code from app 08 - just need to change a few things.*
 
 - **Task 2**: Add a `selectizeInput()` to choose location.
 
-- **Task 3**: Add an additional plot. *rain* vs *date* as a *scatterplot*. 
-
-    - Two possibilities here: Add a dropdown for the different plots as we did in app 06 or
-
-    - You can add another plot below the first
-
-
-```r
-mainPanel(plotlyOutput("plot1"), plotlyOutput("plot2"))
-```
-
-- **Task 4**: `isolate()` some/all the inputs. If you are isolating anything you wil need to add a **go** button (or similar) like we did in app 07.
-
-- **Task 5**: By investigating the extra apps, try to display the two plots in different tabs.
-
-
----
-class: inverse, center, middle
-
-# Next Steps
+- **Task 3**: `isolate()` some/all the inputs. If you are isolating anything you will need to add a **go** button (or similar) like we did in app 07.
 
 ---
 # More Apps ... 
@@ -723,6 +701,11 @@ And plenty of places to learn a bit more
 - Excellent [Short tutorial](https://deanattali.com/blog/building-shiny-apps-tutorial/) written by very experienced shiny programmer.
 
 - The book [Mastering Shiny](https://mastering-shiny.org/), written by RStudio staff.
+
+---
+class: inverse, center, middle
+
+# Next Steps
 
 ---
 # Hosting/Deploying
