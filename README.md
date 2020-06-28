@@ -42,3 +42,11 @@ The easiest way to work with these materials is to open the RStudio project. Thi
 ## Data
 
 The majority of the data used in these applications are built into the additional packages. The exception is historic Met Office data, from the Cambridge, Eastbourne, Nairn and Tiree weather stations. The data is available for download from the Met Office - [https://www.metoffice.gov.uk/research/climate/maps-and-data/historic-station-data](https://www.metoffice.gov.uk/research/climate/maps-and-data/historic-station-data).
+
+## Funding
+
+The production of all the materials for this workshop was funded through ESIF.
+
+![](images/small-UHI_Logo.png)
+![](images/small-ESF_logo2.png)
+![](images/small-SFC_colour_logo.png)
