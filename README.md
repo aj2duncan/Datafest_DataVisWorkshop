@@ -45,7 +45,7 @@ The majority of the data used in these applications are built into the additiona
 
 ## Funding
 
-The production of all the materials for this workshop was funded through ESIF.
+The production of all the materials for this workshop was funded through ESF.
 
 ![](images/small-UHI_Logo.png)
 ![](images/small-ESF_logo2.png)
